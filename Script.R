@@ -5,8 +5,8 @@ setwd("~/Documents/Data Science/Capstone project")
 library(tidyverse)
 library(tidytext)
 library(tm)
-library(stringi)
 library(ggwordcloud)
+library(wordcloud)
 
 
 URLprofanity <- url("https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en")
@@ -79,11 +79,6 @@ word_freq_tw <-as.data.frame(twitter_sample) %>%
   filter(word %in% removeNumbers(word))%>%
   filter(!(word %in% profanity_words)) 
 
-# show the first 100 words
-ggplot(word_freq_tw[1:100,])+
-  geom_bar(aes(x=reorder(word, -n) , y = n),stat="identity")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-
 
 # adding some more words to the stop_words tipple
 custom <- stop_words
@@ -101,11 +96,12 @@ word_freq_tw <-as.data.frame(twitter_sample) %>%
   filter(word %in% removeNumbers(word))%>%
   filter(!(word %in% profanity_words)) 
 
-
-# Plot over
-ggplot(word_freq_tw[1:100,])+
-  geom_bar(aes(x=reorder(word, -n) , y = n),stat="identity")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+# show the first 100 words
+set.seed(1996)
+wordcloud(words = word_freq_tw$word,
+          freq = word_freq_tw$n,min.freq=3482,
+          max.words=Inf, random.order=FALSE,
+          colors=brewer.pal(8, "Dark2"))
 
 
 ################### Blogs ################
